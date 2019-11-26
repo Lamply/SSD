@@ -31,10 +31,12 @@ class BoxPredictor(nn.Module):
     def forward(self, features):
         cls_logits = []
         bbox_pred = []
+        # Get different scale feature map and produce boxes features
         for feature, cls_header, reg_header in zip(features, self.cls_headers, self.reg_headers):
             cls_logits.append(cls_header(feature).permute(0, 2, 3, 1).contiguous())
             bbox_pred.append(reg_header(feature).permute(0, 2, 3, 1).contiguous())
 
+        # Reshape features to [batch, boxes, 21] and [batch, boxes?, 4]
         batch_size = features[0].shape[0]
         cls_logits = torch.cat([c.view(c.shape[0], -1) for c in cls_logits], dim=1).view(batch_size, -1, self.cfg.MODEL.NUM_CLASSES)
         bbox_pred = torch.cat([l.view(l.shape[0], -1) for l in bbox_pred], dim=1).view(batch_size, -1, 4)
