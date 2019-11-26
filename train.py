@@ -17,6 +17,8 @@ from ssd.utils.dist_util import synchronize
 from ssd.utils.logger import setup_logger
 from ssd.utils.misc import str2bool
 
+## Use it when debug in VSCode
+# import multiprocessing
 
 def train(cfg, args):
     logger = logging.getLogger('SSD.trainer')
@@ -46,6 +48,8 @@ def train(cfg, args):
 
 
 def main():
+    ## Use it when debug in VSCode
+    # multiprocessing.set_start_method('spawn',True)
     parser = argparse.ArgumentParser(description='Single Shot MultiBox Detector Training With PyTorch')
     parser.add_argument(
         "--config-file",

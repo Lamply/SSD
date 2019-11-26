@@ -22,3 +22,11 @@ ext/torch_extension.egg-info/
 # Pycharm editor settings
 .idea
 .DS_Store
+
+demo/*
+
+*_DETECT.txt
+
+datasets
+
+outputs
