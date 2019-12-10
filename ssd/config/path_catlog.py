@@ -52,6 +52,12 @@ class DatasetCatalog:
             "data_dir": "val2014",
             "ann_file": "annotations/instances_val2014.json"
         },
+        'rotate_train': {
+            "train": True
+        },
+        'rotate_val': {
+            "train": False
+        },
     }
 
     @staticmethod
@@ -78,5 +84,11 @@ class DatasetCatalog:
                 ann_file=os.path.join(coco_root, attrs["ann_file"]),
             )
             return dict(factory="COCODataset", args=args)
+        elif "rotate" in name:
+            attrs = DatasetCatalog.DATASETS[name]
+            args = dict(
+                train=attrs["train"],
+            )
+            return dict(factory="RotateDataset", args=args)
 
         raise RuntimeError("Dataset not available: {}".format(name))

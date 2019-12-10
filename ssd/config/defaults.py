@@ -34,6 +34,7 @@ _C.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2], [2]]
 # #boxes = 2 + #ratio * 2
 _C.MODEL.PRIORS.BOXES_PER_LOCATION = [4, 6, 6, 6, 4, 4]  # number of boxes per feature map location
 _C.MODEL.PRIORS.CLIP = True
+_C.MODEL.PRIORS.BIN_SIZE = 8  # set the angle 0-180 to discrete bin
 
 # -----------------------------------------------------------------------------
 # Box Head

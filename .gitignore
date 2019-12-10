@@ -23,9 +23,11 @@ ext/torch_extension.egg-info/
 .idea
 .DS_Store
 
+.vscode
+
 demo/*
 
-*_DETECT.txt
+*_DETECT*.txt
 
 datasets
 
