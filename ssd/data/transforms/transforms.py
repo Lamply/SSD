@@ -10,7 +10,7 @@ from numpy import random
 
 
 def intersect(box_a, box_b):
-    max_xy = np.minimum(box_a[:, 2:], box_b[2:])
+    max_xy = np.minimum(box_a[:, 2:4], box_b[2:4])
     min_xy = np.maximum(box_a[:, :2], box_b[:2])
     inter = np.clip((max_xy - min_xy), a_min=0, a_max=np.inf)
     return inter[:, 0] * inter[:, 1]
@@ -122,6 +122,17 @@ class ToPercentCoords(object):
         boxes[:, 2] /= width
         boxes[:, 1] /= height
         boxes[:, 3] /= height
+
+        return image, boxes, labels
+
+class ToPercentCoordsAngle(object):
+    def __call__(self, image, boxes=None, labels=None):
+        height, width, channels = image.shape
+        boxes[:, 0] /= width
+        boxes[:, 2] /= width
+        boxes[:, 1] /= height
+        boxes[:, 3] /= height
+        boxes[:, 4] /= 180.0
 
         return image, boxes, labels
 
@@ -309,7 +320,7 @@ class RandomSampleCrop(object):
                                 :]
 
                 # keep overlap with gt box IF center in sampled patch
-                centers = (boxes[:, :2] + boxes[:, 2:]) / 2.0
+                centers = (boxes[:, :2] + boxes[:, 2:4]) / 2.0
 
                 # mask in all gt boxes that above and to the left of centers
                 m1 = (rect[0] < centers[:, 0]) * (rect[1] < centers[:, 1])
@@ -336,10 +347,10 @@ class RandomSampleCrop(object):
                 # adjust to crop (by substracting crop's left,top)
                 current_boxes[:, :2] -= rect[:2]
 
-                current_boxes[:, 2:] = np.minimum(current_boxes[:, 2:],
-                                                  rect[2:])
+                current_boxes[:, 2:4] = np.minimum(current_boxes[:, 2:4],
+                                                  rect[2:4])
                 # adjust to crop (by substracting crop's left,top)
-                current_boxes[:, 2:] -= rect[:2]
+                current_boxes[:, 2:4] -= rect[:2]
 
                 return current_image, current_boxes, current_labels
 
@@ -367,7 +378,7 @@ class Expand(object):
 
         boxes = boxes.copy()
         boxes[:, :2] += (int(left), int(top))
-        boxes[:, 2:] += (int(left), int(top))
+        boxes[:, 2:4] += (int(left), int(top))
 
         return image, boxes, labels
 
@@ -378,7 +389,7 @@ class RandomMirror(object):
         if random.randint(2):
             image = image[:, ::-1]
             boxes = boxes.copy()
-            boxes[:, 0::2] = width - boxes[:, 2::-2]
+            boxes[:, 0:4:2] = width - boxes[:, 2::-2]
         return image, boxes, classes
 
 

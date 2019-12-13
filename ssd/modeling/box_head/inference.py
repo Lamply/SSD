@@ -10,6 +10,9 @@ class PostProcessor:
         self.cfg = cfg
         self.width = cfg.INPUT.IMAGE_SIZE
         self.height = cfg.INPUT.IMAGE_SIZE
+        self.with_angle = False
+        if cfg.MODEL.BOX_HEAD.NAME == "SSDRotateBoxHead":
+            self.with_angle = True
 
     def __call__(self, detections):
         batches_scores, batches_boxes = detections
@@ -29,10 +32,12 @@ class PostProcessor:
                 if scores.size(0) == 0:
                     continue
                 boxes = per_img_boxes[mask, :]
-                boxes[:, 0::2] *= self.width
+                boxes[:, 0:4:2] *= self.width
                 boxes[:, 1::2] *= self.height
-
-                keep = boxes_nms(boxes, scores, self.cfg.TEST.NMS_THRESHOLD, self.cfg.TEST.MAX_PER_CLASS)
+                if self.with_angle is True:
+                    boxes[:, 4] *= 180.0
+                
+                keep = boxes_nms(boxes[:,0:4], scores, self.cfg.TEST.NMS_THRESHOLD, self.cfg.TEST.MAX_PER_CLASS)
 
                 nmsed_boxes = boxes[keep, :]
                 nmsed_labels = torch.tensor([class_id] * keep.size(0), device=device)

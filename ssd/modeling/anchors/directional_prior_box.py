@@ -19,7 +19,7 @@ class DirectionalPriorBox:
             It returns the center, height, width and angle of the priors. The values are relative to the image size
             Returns:
                 priors (num_priors, 5): The prior boxes represented as [[center_x, center_y, w, h, angle]]. All the values
-                    are relative to the image size.
+                    are relative to the image size. Angle is normalize to [0.0, 1.0).
         """
         priors = []
         for k, f in enumerate(self.feature_maps):
@@ -33,14 +33,14 @@ class DirectionalPriorBox:
                 size = self.min_sizes[k]
                 h = w = size / self.image_size
                 for ang in range(self.bin_size):
-                    angle = ang*180.0/self.bin_size
+                    angle = ang/self.bin_size
                     priors.append([cx, cy, w, h, angle])
 
                 # big sized square box
                 size = sqrt(self.min_sizes[k] * self.max_sizes[k])
                 h = w = size / self.image_size
                 for ang in range(self.bin_size):
-                    angle = ang*180.0/self.bin_size
+                    angle = ang/self.bin_size
                     priors.append([cx, cy, w, h, angle])
 
         priors = torch.tensor(priors)

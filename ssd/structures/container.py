@@ -46,7 +46,7 @@ class Container:
         assert 'boxes' in self._data_dict
         boxes = self._data_dict['boxes']
         new_width, new_height = size
-        boxes[:, 0::2] *= (new_width / img_width)
+        boxes[:, 0:4:2] *= (new_width / img_width)
         boxes[:, 1::2] *= (new_height / img_height)
         return self
 

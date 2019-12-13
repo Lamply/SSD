@@ -1,9 +1,13 @@
 MODEL:
   NUM_CLASSES: 2
+  BOXES_DIM: 5
   PRIORS:
     BOXES_PER_LOCATION: [16, 16, 16, 16, 16, 16]
     CLIP: False
     BIN_SIZE: 8
+  BOX_HEAD:
+    NAME: SSDRotateBoxHead
+    PREDICTOR: SSDRotateBoxPredictor
 INPUT:
   IMAGE_SIZE: 300
 DATASETS:

@@ -39,7 +39,7 @@ class BoxPredictor(nn.Module):
         # Reshape features to [batch, boxes, 21] and [batch, boxes?, 4]
         batch_size = features[0].shape[0]
         cls_logits = torch.cat([c.view(c.shape[0], -1) for c in cls_logits], dim=1).view(batch_size, -1, self.cfg.MODEL.NUM_CLASSES)
-        bbox_pred = torch.cat([l.view(l.shape[0], -1) for l in bbox_pred], dim=1).view(batch_size, -1, 4)
+        bbox_pred = torch.cat([l.view(l.shape[0], -1) for l in bbox_pred], dim=1).view(batch_size, -1, self.cfg.MODEL.BOXES_DIM)
 
         return cls_logits, bbox_pred
 
@@ -52,6 +52,13 @@ class SSDBoxPredictor(BoxPredictor):
     def reg_block(self, level, out_channels, boxes_per_location):
         return nn.Conv2d(out_channels, boxes_per_location * 4, kernel_size=3, stride=1, padding=1)
 
+@registry.BOX_PREDICTORS.register('SSDRotateBoxPredictor')
+class SSDRotateBoxPredictor(BoxPredictor):
+    def cls_block(self, level, out_channels, boxes_per_location):
+        return nn.Conv2d(out_channels, boxes_per_location * self.cfg.MODEL.NUM_CLASSES, kernel_size=3, stride=1, padding=1)
+
+    def reg_block(self, level, out_channels, boxes_per_location):
+        return nn.Conv2d(out_channels, boxes_per_location * 5, kernel_size=3, stride=1, padding=1)
 
 @registry.BOX_PREDICTORS.register('SSDLiteBoxPredictor')
 class SSDLiteBoxPredictor(BoxPredictor):

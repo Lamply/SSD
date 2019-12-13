@@ -13,6 +13,8 @@ from ssd.utils.checkpoint import CheckPointer
 from ssd.utils.dist_util import synchronize
 from ssd.utils.logger import setup_logger
 
+import multiprocessing
+
 
 def evaluation(cfg, ckpt, distributed):
     logger = logging.getLogger("SSD.inference")
@@ -81,4 +83,5 @@ def main():
 
 
 if __name__ == '__main__':
+    multiprocessing.set_start_method('spawn',True)
     main()

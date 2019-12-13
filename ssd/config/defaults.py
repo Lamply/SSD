@@ -8,6 +8,7 @@ _C.MODEL.DEVICE = "cuda"
 # match default boxes to any ground truth with jaccard overlap higher than a threshold (0.5)
 _C.MODEL.THRESHOLD = 0.5
 _C.MODEL.NUM_CLASSES = 21
+_C.MODEL.BOXES_DIM = 4    # [x, y, w, h] by default
 # Hard negative mining
 _C.MODEL.NEG_POS_RATIO = 3
 _C.MODEL.CENTER_VARIANCE = 0.1
