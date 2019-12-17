@@ -74,13 +74,13 @@ def run_demo(cfg, ckpt, score_threshold, images_dir, output_dir, dataset_type):
         drawn_image = draw_boxes(image, boxes, labels, scores, class_names).astype(np.uint8)
         Image.fromarray(drawn_image).save(os.path.join(output_dir, image_name))
 
-        rbox_file = open("rotate_result_rbox/"+image_name+'.rbox', 'w')
-        npboxes = torch.tensor(boxes)
-        npboxes = corner_form_to_center_form(npboxes).numpy()
-        for i in range(npboxes.shape[0]):
-            rbox_file.write(str(npboxes[i,0])+' '+str(npboxes[i,1])+' '+str(npboxes[i,2])+' '+str(npboxes[i,3])+' '+
-                            str(labels[i])+' '+str(npboxes[i,4])+' '+'\n')
-        rbox_file.close()
+        # rbox_file = open("rotate_result_rbox/"+image_name+'.rbox', 'w')
+        # npboxes = torch.tensor(boxes)
+        # npboxes = corner_form_to_center_form(npboxes).numpy()
+        # for i in range(npboxes.shape[0]):
+        #     rbox_file.write(str(npboxes[i,0])+' '+str(npboxes[i,1])+' '+str(npboxes[i,2])+' '+str(npboxes[i,3])+' '+
+        #                     str(labels[i])+' '+str(npboxes[i,4])+' '+'\n')
+        # rbox_file.close()
 
 
 def main():

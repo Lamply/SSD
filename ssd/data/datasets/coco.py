@@ -2,6 +2,7 @@ import os
 import torch.utils.data
 import numpy as np
 from PIL import Image
+from PIL import ImageFile
 
 from ssd.structures.container import Container
 
@@ -33,13 +34,14 @@ class COCODataset(torch.utils.data.Dataset):
         self.remove_empty = remove_empty
         if self.remove_empty:
             # when training, images without annotations are removed.
-            self.ids = list(self.coco.imgToAnns.keys())
+            self.ids = np.array(list(self.coco.imgToAnns.keys()))
         else:
             # when testing, all images used.
-            self.ids = list(self.coco.imgs.keys())
+            self.ids = np.array(list(self.coco.imgs.keys()))
         coco_categories = sorted(self.coco.getCatIds())
         self.coco_id_to_contiguous_id = {coco_id: i + 1 for i, coco_id in enumerate(coco_categories)}
         self.contiguous_id_to_coco_id = {v: k for k, v in self.coco_id_to_contiguous_id.items()}
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
 
     def __getitem__(self, index):
         image_id = self.ids[index]

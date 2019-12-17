@@ -11,4 +11,5 @@ In loss class, I addition angles' mse loss to coordinates' smooth l1 loss.
 
 Evalution method is imcomplete, my implement just ignore the angle.
 
-
+### Problem
+Memory problem occur when evaluation, should be fixed, ref: https://github.com/pytorch/pytorch/issues/13246
