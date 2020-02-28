@@ -35,6 +35,11 @@ def run_demo(cfg, ckpt, score_threshold, images_dir, output_dir, dataset_type):
     weight_file = ckpt if ckpt else checkpointer.get_checkpoint_file()
     print('Loaded weights from {}'.format(weight_file))
 
+    # dummy_input = torch.randn(1, 3, 300, 300, device='cuda')
+    # input_names = ["input"]
+    # output_names = ["output"]
+    # torch.onnx.export(model, dummy_input, "vgg_ssd300_voc.onnx", verbose=True, input_names=input_names, output_names=output_names)
+
     image_paths = glob.glob(os.path.join(images_dir, '*.jpg'))
     mkdir(output_dir)
 
